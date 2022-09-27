@@ -1,7 +1,7 @@
 /*
- * @lc app=leetcode.cn id=39 lang=javascript
+ * @lc app=leetcode.cn id=40 lang=javascript
  *
- * [39] 组合总和
+ * [40] 组合总和 II
  */
 
 // @lc code=start
@@ -10,23 +10,28 @@
  * @param {number} target
  * @return {number[][]}
  */
-var combinationSum = function (candidates, target) {
+var combinationSum2 = function (candidates, target) {
   let result = [],
+    used = new Set(),
     arr = [],
     sum = 0;
+  candidates = candidates.sort();
 
   const backTrack = (index) => {
-    if (sum === target) {
+    if (sum === target && !used.has(arr.join(""))) {
       result.push([...arr]);
+      used.add(arr.join(""));
       return;
     }
     if (sum > target) return;
+
     for (let i = index; i < candidates.length; i++) {
+      if (i > index && candidates[i] === candidates[i - 1]) continue;
       arr.push(candidates[i]);
       sum += candidates[i];
-      backTrack(i);
-      sum -= candidates[i];
+      backTrack(i + 1);
       arr.pop();
+      sum -= candidates[i];
     }
   };
 
